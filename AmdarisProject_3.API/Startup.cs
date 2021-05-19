@@ -28,15 +28,46 @@ namespace AmdarisProject_3.API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
-
+            
             services.AddControllers();
+            //services.AddMvc();
+
             services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AmdarisProject_3.API", Version = "v1" });
+            {                
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "AmdarisProject_3.API",                    
+                    Description = "ASP.NET Core 5.0 WEB API"                    
+                });
+                
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "ApplicationSettings:JWT_Secret",
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
             });
 
             services.AddDbContext<AuthenticationContext>(options =>
@@ -63,20 +94,26 @@ namespace AmdarisProject_3.API
                 x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(x =>
                 {
-                    x.RequireHttpsMetadata = false;
-                    x.SaveToken = false;
-                    x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                    //x.RequireHttpsMetadata = false;
+                    //x.SaveToken = false;
+                    x.TokenValidationParameters = new TokenValidationParameters
                     {
+                        //ValidateIssuerSigningKey = true,
+                        //IssuerSigningKey = new SymmetricSecurityKey(key),
+                        //ValidateIssuer = false,
+                        //ValidateAudience = false,
+                        //ClockSkew = TimeSpan.Zero
+
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = false,
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ClockSkew = TimeSpan.Zero
+                        ValidIssuer = Configuration["ApplicationSettings:Client_URL"],
+                        ValidAudience = Configuration["ApplicationSettings:Client_URL"],
+                        IssuerSigningKey = new SymmetricSecurityKey(key)
                     };
                 });
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -85,6 +122,8 @@ namespace AmdarisProject_3.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AmdarisProject_3.API v1"));
             }
+
+            app.UseHttpsRedirection();
 
             app.UseCors(builder =>
                 builder.WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString()).

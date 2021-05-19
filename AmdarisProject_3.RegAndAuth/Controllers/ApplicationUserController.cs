@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -12,22 +13,24 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AmdarisProject_3.API
+namespace AmdarisProject_3.RegAndAuth.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class ApplicationUserController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        //private readonly SignInManager<ApplicationUser> _signInManager;
+        //private SignInManager<ApplicationUser> _signInManager;
         private readonly ApplicationSettings _appSettings;
+        private readonly ILogger<ApplicationUserController> _logger;
 
         public ApplicationUserController(UserManager<ApplicationUser> userManager, /*SignInManager<ApplicationUser> signInManager,*/
-                                         IOptions<ApplicationSettings> appSettings)
+                                         IOptions<ApplicationSettings> appSettings, ILogger<ApplicationUserController> logger)
         {
             _userManager = userManager;
             //_signInManager = signInManager;
             _appSettings = appSettings.Value;
+            _logger = logger;
         }
 
         [HttpPost]
