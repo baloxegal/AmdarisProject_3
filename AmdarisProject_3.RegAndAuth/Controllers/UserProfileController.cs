@@ -40,6 +40,30 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
                 user.UserName
             };
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        [Route("Admin")]
+        public string GetAdminPage()
+        {
+            return "Web method for AdminPage";
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Customer")]
+        [Route("Customer")]
+        public string GetCustomerPage()
+        {
+            return "Web method for CustomerPage";
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin, Customer")]
+        [Route("AdminOrCustomer")]
+        public string GetAdminOrCustomerPage()
+        {
+            return "Web method for Admin or Customer";
+        }
     }
 }
 

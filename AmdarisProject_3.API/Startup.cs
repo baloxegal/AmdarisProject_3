@@ -31,9 +31,10 @@ namespace AmdarisProject_3.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
-            
-            services.AddControllers();
-            //services.AddMvc();
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            services.AddControllers();            
 
             services.AddSwaggerGen(c =>
             {                
@@ -44,36 +45,36 @@ namespace AmdarisProject_3.API
                     Description = "ASP.NET Core 5.0 WEB API"                    
                 });
                 
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-                {
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer",
-                    BearerFormat = "JWT",
-                    In = ParameterLocation.Header,
-                    Description = "ApplicationSettings:JWT_Secret",
-                });
+                //c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                //{
+                //    Name = "Authorization",
+                //    Type = SecuritySchemeType.ApiKey,
+                //    Scheme = "Bearer",
+                //    BearerFormat = "JWT",
+                //    In = ParameterLocation.Header,
+                //    Description = "ApplicationSettings:JWT_Secret",
+                //});
 
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        new string[] {}
-                    }
-                });
+                //c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                //{
+                //    {
+                //        new OpenApiSecurityScheme
+                //        {
+                //            Reference = new OpenApiReference
+                //            {
+                //                Type = ReferenceType.SecurityScheme,
+                //                Id = "Bearer"
+                //            }
+                //        },
+                //        new string[] {}
+                //    }
+                //});
             });
 
             services.AddDbContext<AuthenticationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DbConnection"), b => b.MigrationsAssembly("AmdarisProject_3.API")));
 
-            services.AddIdentityCore<ApplicationUser>().
+            services.AddIdentity<ApplicationUser, IdentityRole>().
                 AddEntityFrameworkStores<AuthenticationContext>();
 
             services.Configure<IdentityOptions>(options =>
@@ -94,23 +95,23 @@ namespace AmdarisProject_3.API
                 x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(x =>
                 {
-                    //x.RequireHttpsMetadata = false;
-                    //x.SaveToken = false;
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = false;
                     x.TokenValidationParameters = new TokenValidationParameters
                     {
-                        //ValidateIssuerSigningKey = true,
-                        //IssuerSigningKey = new SymmetricSecurityKey(key),
-                        //ValidateIssuer = false,
-                        //ValidateAudience = false,
-                        //ClockSkew = TimeSpan.Zero
-
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = false,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["ApplicationSettings:Client_URL"],
-                        ValidAudience = Configuration["ApplicationSettings:Client_URL"],
-                        IssuerSigningKey = new SymmetricSecurityKey(key)
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ClockSkew = TimeSpan.Zero
+
+                        //ValidateIssuer = true,
+                        //ValidateAudience = true,
+                        //ValidateLifetime = false,
+                        //ValidateIssuerSigningKey = true,
+                        //ValidIssuer = Configuration["ApplicationSettings:Client_URL"],
+                        //ValidAudience = Configuration["ApplicationSettings:Client_URL"],
+                        //IssuerSigningKey = new SymmetricSecurityKey(key)
                     };
                 });
         }
