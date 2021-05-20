@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AmdarisProject_3.RegAndAuth.Models
+﻿namespace AmdarisProject_3.Domain.Models.Auth
 {
     public class ApplicationUserModel
     {
@@ -15,6 +9,6 @@ namespace AmdarisProject_3.RegAndAuth.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Avatar { get; set; }
-        public string Role { get; set; }
+        public RoleTypes Role { get; set; }
     }
 }

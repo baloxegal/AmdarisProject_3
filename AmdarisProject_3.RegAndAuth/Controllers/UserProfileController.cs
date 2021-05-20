@@ -1,17 +1,9 @@
-﻿using AmdarisProject_3.RegAndAuth.Models;
+﻿using AmdarisProject_3.Domain.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AmdarisProject_3.RegAndAuth.Controllers
@@ -20,7 +12,7 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
     [ApiController]
     public class UserProfileController : ControllerBase
     {
-        private UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         public UserProfileController(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;

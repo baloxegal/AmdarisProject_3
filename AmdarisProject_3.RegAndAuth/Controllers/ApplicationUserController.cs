@@ -1,12 +1,11 @@
-﻿using AmdarisProject_3.RegAndAuth.Models;
-using Microsoft.AspNetCore.Http;
+﻿using AmdarisProject_3.Domain.Models.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -21,11 +20,11 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         //private SignInManager<ApplicationUser> _signInManager;
-        private readonly ApplicationSettings _appSettings;
+        private readonly AuthSettings _appSettings;
         private readonly ILogger<ApplicationUserController> _logger;
 
         public ApplicationUserController(UserManager<ApplicationUser> userManager, /*SignInManager<ApplicationUser> signInManager,*/
-                                         IOptions<ApplicationSettings> appSettings, ILogger<ApplicationUserController> logger)
+                                         IOptions<AuthSettings> appSettings, ILogger<ApplicationUserController> logger)
         {
             _userManager = userManager;
             //_signInManager = signInManager;
@@ -37,7 +36,7 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
         [Route("register")]
         public async Task<Object> PostApplicationUser(ApplicationUserModel model)
         {
-            model.Role = "Admin";
+            model.Role = RoleTypes.CUSTOMER;
 
             var applicationUser = new ApplicationUser()
             {
@@ -45,12 +44,12 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
                 FirstName = model.FirstName,
-                LastName = model.LastName,
+                LastName = model.LastName
             };
             try
             {
                 var result = await _userManager.CreateAsync(applicationUser, model.Password);
-                await _userManager.AddToRoleAsync(applicationUser, model.Role);
+                await _userManager.AddToRoleAsync(applicationUser, Enum.GetName(model.Role));
                 return Ok(result);
             }
             catch (Exception)

@@ -1,3 +1,4 @@
+using AmdarisProject_3.API.Seeds;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -11,9 +12,11 @@ namespace AmdarisProject_3.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            IHost host = CreateHostBuilder(args).Build();
+            await host.SeedData();
+            await host.RunAsync();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -24,3 +27,4 @@ namespace AmdarisProject_3.API
                 });
     }
 }
+

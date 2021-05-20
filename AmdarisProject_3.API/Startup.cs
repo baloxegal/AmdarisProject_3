@@ -1,4 +1,3 @@
-using AmdarisProject_3.RegAndAuth.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,14 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using AmdarisProject_3.Domain.Models.Auth;
+using AmdarisProject_3.RegAndAuth;
 
 namespace AmdarisProject_3.API
 {
@@ -30,7 +27,7 @@ namespace AmdarisProject_3.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
+            services.Configure<AuthSettings>(Configuration.GetSection("ApplicationSettings"));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
@@ -45,6 +42,8 @@ namespace AmdarisProject_3.API
                     Description = "ASP.NET Core 5.0 WEB API"                    
                 });
                 
+                //It is for token authorization in swagger - not working
+
                 //c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 //{
                 //    Name = "Authorization",
@@ -71,11 +70,11 @@ namespace AmdarisProject_3.API
                 //});
             });
 
-            services.AddDbContext<AuthenticationContext>(options =>
+            services.AddDbContext<SocialMediaDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DbConnection"), b => b.MigrationsAssembly("AmdarisProject_3.API")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>().
-                AddEntityFrameworkStores<AuthenticationContext>();
+                AddEntityFrameworkStores<SocialMediaDbContext>();
 
             services.Configure<IdentityOptions>(options =>
             {

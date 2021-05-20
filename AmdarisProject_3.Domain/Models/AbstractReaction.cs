@@ -1,13 +1,9 @@
-﻿using AmdarisProject_3.RegAndAuth.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using AmdarisProject_3.Domain.Models.Auth;
 
 namespace AmdarisProject_3.Domain.Models
 {
-    class AbstractReaction
+    public class AbstractReaction
     {
         public long Id { get; set; }
         public DateTime Created { get; set; }
