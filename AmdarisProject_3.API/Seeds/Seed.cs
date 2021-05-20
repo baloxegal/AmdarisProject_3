@@ -29,7 +29,10 @@ namespace AmdarisProject_3.API.Seeds
             if (!context.Roles.Any())
             {
                 var adminRole = new IdentityRole(Enum.GetName(RoleTypes.ADMIN));
+                adminRole.NormalizedName = Enum.GetName(RoleTypes.ADMIN);
+
                 var customerRole = new IdentityRole(Enum.GetName(RoleTypes.CUSTOMER));
+                customerRole.NormalizedName = Enum.GetName(RoleTypes.CUSTOMER);
 
                 context.Roles.Add(adminRole);
                 context.Roles.Add(customerRole);
