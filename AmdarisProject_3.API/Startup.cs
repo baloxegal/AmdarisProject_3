@@ -78,9 +78,17 @@ namespace AmdarisProject_3.API
 
             services.Configure<IdentityOptions>(options =>
             {
-                options.Password.RequiredLength = 8;
+                options.Password.RequiredLength = 1;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
-                options.User.RequireUniqueEmail = true;
+                options.Lockout.MaxFailedAccessAttempts = 20;
+                //options.Tokens.PasswordResetTokenProvider = "222";
+                //options.Tokens.PasswordResetTokenProvider = "222";
+                //options.Tokens.ChangeEmailTokenProvider = "222";
+                //options.SignIn.RequireConfirmedAccount = true;
+                //options.User.RequireUniqueEmail = true;
             });
 
             services.AddCors();

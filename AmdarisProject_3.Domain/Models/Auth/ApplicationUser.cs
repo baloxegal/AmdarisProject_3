@@ -10,6 +10,6 @@ namespace AmdarisProject_3.Domain.Models.Auth
 
         [Column(TypeName = "nvarchar(150)")]
         public string LastName { get; set; }
-
+        public string Avatar { get; set; }
     }
 }
