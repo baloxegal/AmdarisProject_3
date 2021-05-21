@@ -83,7 +83,7 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var securityToken = tokenHandler.CreateToken(tokenDescriptor);
                 var token = tokenHandler.WriteToken(securityToken);
-                return Ok(new { token });
+                return Ok(new { token, message = "Login successful" });
             }
             else
                 return BadRequest(new { message = "Username or password is incorrect." });
