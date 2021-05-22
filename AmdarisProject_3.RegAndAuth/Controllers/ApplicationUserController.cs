@@ -19,15 +19,15 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
     public class ApplicationUserController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        //private SignInManager<ApplicationUser> _signInManager;
+        private SignInManager<ApplicationUser> _signInManager;
         private readonly AuthSettings _appSettings;
         private readonly ILogger<ApplicationUserController> _logger;
 
-        public ApplicationUserController(UserManager<ApplicationUser> userManager, /*SignInManager<ApplicationUser> signInManager,*/
+        public ApplicationUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
                                          IOptions<AuthSettings> appSettings, ILogger<ApplicationUserController> logger)
         {
             _userManager = userManager;
-            //_signInManager = signInManager;
+            _signInManager = signInManager;
             _appSettings = appSettings.Value;
             _logger = logger;
         }
@@ -50,6 +50,8 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
             {
                 var result = await _userManager.CreateAsync(applicationUser, model.Password);
                 await _userManager.AddToRoleAsync(applicationUser, Enum.GetName(model.Role));
+                await _signInManager.SignInAsync(applicationUser, false);
+
                 return Ok(result);
             }
             catch (Exception)
@@ -83,10 +85,22 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var securityToken = tokenHandler.CreateToken(tokenDescriptor);
                 var token = tokenHandler.WriteToken(securityToken);
+
+                await _signInManager.SignInAsync(user, model.RememberMe);
+
                 return Ok(new { token, message = "Login successful" });
             }
             else
                 return BadRequest(new { message = "Username or password is incorrect." });
+        }
+
+        [HttpPost]
+        [Route("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+
+            return Ok(new { message = "Logout successful" });            
         }
     }
 }
