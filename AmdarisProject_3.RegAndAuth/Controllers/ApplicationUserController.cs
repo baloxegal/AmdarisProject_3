@@ -49,10 +49,14 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
             try
             {
                 var result = await _userManager.CreateAsync(applicationUser, model.Password);
-                await _userManager.AddToRoleAsync(applicationUser, Enum.GetName(model.Role));
-                await _signInManager.SignInAsync(applicationUser, false);
-
-                return Ok(result);
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(applicationUser, Enum.GetName(model.Role));
+                    await _signInManager.SignInAsync(applicationUser, true);
+                    return Ok(new { result, message = "register successful" });
+                }
+                else
+                    return BadRequest(new { message = "Username have been always exist or data is not valid" });
             }
             catch (Exception)
             {

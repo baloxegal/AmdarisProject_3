@@ -26,10 +26,12 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
             var user = await _userManager.FindByIdAsync(userId);
             return new
             {
+                user.UserName,
                 user.FirstName,
                 user.LastName,
                 user.Email,
-                user.UserName
+                user.PhoneNumber,
+                user.Avatar
             };
         }
 
