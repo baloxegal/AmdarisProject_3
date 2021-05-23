@@ -20,5 +20,30 @@ namespace AmdarisProject_3.API
         public DbSet<TextPost> TextPosts { get; set; }
         public DbSet<VideoPost> VideoPosts { get; set; }
         public DbSet<ImagePost> ImagePosts { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Event> Events { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);            
+            modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+
+            //modelBuilder.Entity<Event>().ToTable("Events");
+
+            modelBuilder.Entity<Event>()
+                .HasMany(x => x.Authors)
+                .WithMany(x => x.Events)
+                .UsingEntity(x => x.ToTable("EventsAuthors"));
+
+            modelBuilder.Entity<Event>()
+               .HasMany(x => x.Participant)
+               .WithMany(x => x.Events)
+               .UsingEntity(x => x.ToTable("EventsParticipants"));
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(x => x.Messages)
+                .WithOne(x => x.Sender)
+                .OnDelete(DeleteBehavior.Restrict);      
+        }
     }
 }
