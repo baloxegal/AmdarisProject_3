@@ -17,11 +17,7 @@ namespace AmdarisProject_3.Domain.Models
         public DateTime Modified { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
-        [NotMapped]
-        public ApplicationUser AuthorId { get; set; }
         public virtual ICollection<ApplicationUser> Authors { get; set; }
-        [NotMapped]
-        public ApplicationUser ParticipantId { get; set; }
-        public virtual ICollection<ApplicationUser> Participant { get; set; }
+        public virtual ICollection<ApplicationUser> Participants { get; set; }
     }
 }

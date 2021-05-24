@@ -9,6 +9,6 @@ namespace AmdarisProject_3.Domain.Models
         public string Title { get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
-        public ApplicationUser Author { get; set; }
+        public virtual ApplicationUser Author { get; set; }
     }
 }

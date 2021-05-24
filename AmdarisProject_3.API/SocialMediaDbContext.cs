@@ -25,25 +25,26 @@ namespace AmdarisProject_3.API
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);            
-            modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+            base.OnModelCreating(modelBuilder);
 
             //modelBuilder.Entity<Event>().ToTable("Events");
 
             modelBuilder.Entity<Event>()
                 .HasMany(x => x.Authors)
-                .WithMany(x => x.Events)
+                .WithMany(x => x.EventsAuthor)
                 .UsingEntity(x => x.ToTable("EventsAuthors"));
 
             modelBuilder.Entity<Event>()
-               .HasMany(x => x.Participant)
-               .WithMany(x => x.Events)
+               .HasMany(x => x.Participants)
+               .WithMany(x => x.EventsParticipants)
                .UsingEntity(x => x.ToTable("EventsParticipants"));
 
             modelBuilder.Entity<ApplicationUser>()
                 .HasMany(x => x.Messages)
                 .WithOne(x => x.Sender)
-                .OnDelete(DeleteBehavior.Restrict);      
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }
     }
 }

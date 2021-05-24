@@ -19,7 +19,7 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
     public class ApplicationUserController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private SignInManager<ApplicationUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly AuthSettings _appSettings;
         private readonly ILogger<ApplicationUserController> _logger;
 
