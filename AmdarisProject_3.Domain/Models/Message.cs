@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AmdarisProject_3.Domain.Models
 {
-    public class Message
+    public class Message : IEntity
     {
         public long Id { get; set; }
         public DateTime Created { get; set; }

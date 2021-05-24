@@ -27,8 +27,6 @@ namespace AmdarisProject_3.API
         {
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.Entity<Event>().ToTable("Events");
-
             modelBuilder.Entity<Event>()
                 .HasMany(x => x.Authors)
                 .WithMany(x => x.EventsAuthor)

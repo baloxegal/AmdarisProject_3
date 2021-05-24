@@ -3,7 +3,7 @@ using AmdarisProject_3.Domain.Models.Auth;
 
 namespace AmdarisProject_3.Domain.Models
 {
-    public abstract class AbstractPost
+    public abstract class AbstractPost : IEntity
     {
         public long Id { get; set; }
         public string Title { get; set; }

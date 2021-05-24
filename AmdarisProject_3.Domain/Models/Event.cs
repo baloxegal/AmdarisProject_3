@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AmdarisProject_3.Domain.Models
 {
-    public class Event
+    public class Event : IEntity
     {
         public long Id { get; set; }        
         public string Title { get; set; }

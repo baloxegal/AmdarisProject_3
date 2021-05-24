@@ -3,7 +3,7 @@ using AmdarisProject_3.Domain.Models.Auth;
 
 namespace AmdarisProject_3.Domain.Models
 {
-    public class AbstractReaction
+    public class AbstractReaction : IEntity
     {
         public long Id { get; set; }
         public DateTime Created { get; set; }

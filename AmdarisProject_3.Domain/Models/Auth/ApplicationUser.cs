@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AmdarisProject_3.Domain.Models.Auth
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser : IdentityUser, IEntity
     {        
         [Column(TypeName = "nvarchar(150)")]
         public string FirstName { get; set; }
