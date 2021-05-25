@@ -41,11 +41,11 @@ namespace AmdarisProject_3.API.Seeds
             }
         }
 
-        public static async Task SeedUsers(UserManager<ApplicationUser> userManager)
+        public static async Task SeedUsers(UserManager<User> userManager)
         {
             if (!userManager.Users.Any())
             {
-                var applicationUser_1 = new ApplicationUser()
+                var applicationUser_1 = new User()
                 {
                     UserName = "Baloxegal",
                     Email = "baloxegal@gmail.com",
@@ -54,7 +54,7 @@ namespace AmdarisProject_3.API.Seeds
                     LastName = "Balan"
                 };
 
-                var applicationUser_2 = new ApplicationUser()
+                var applicationUser_2 = new User()
                 {
                     UserName = "Alex",
                     Email = "baloxegal1@gmail.com",
@@ -63,7 +63,7 @@ namespace AmdarisProject_3.API.Seeds
                     LastName = "Balan"
                 };
 
-                var applicationUser_3 = new ApplicationUser()
+                var applicationUser_3 = new User()
                 {
                     UserName = "Egex",
                     Email = "balox@gmail.com",

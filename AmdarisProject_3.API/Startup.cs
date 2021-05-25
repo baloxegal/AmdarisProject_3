@@ -11,8 +11,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Text;
-using AmdarisProject_3.Domain.Models.Auth;
+using AmdarisProject_3.Domain.Models;
 using AmdarisProject_3.RegAndAuth;
+using AmdarisProject_3.API.Repositories;
+using AmdarisProject_3.API.Services;
 
 namespace AmdarisProject_3.API
 {
@@ -63,7 +65,7 @@ namespace AmdarisProject_3.API
                                 Id = "Bearer"
                             }
                         },
-                        new string[] {}
+                        Array.Empty<string>()
                     }
                 });
             });
@@ -71,7 +73,7 @@ namespace AmdarisProject_3.API
             services.AddDbContext<SocialMediaDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DbConnection"), b => b.MigrationsAssembly("AmdarisProject_3.API")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>().
+            services.AddIdentity<User, IdentityRole>().
                 AddEntityFrameworkStores<SocialMediaDbContext>();
 
             services.Configure<IdentityOptions>(options =>
@@ -82,6 +84,7 @@ namespace AmdarisProject_3.API
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Lockout.MaxFailedAccessAttempts = 20;
+
                 //options.Tokens.PasswordResetTokenProvider = "222";
                 //options.Tokens.PasswordResetTokenProvider = "222";
                 //options.Tokens.ChangeEmailTokenProvider = "222";
@@ -110,15 +113,21 @@ namespace AmdarisProject_3.API
                         ValidateAudience = false,
                         ClockSkew = TimeSpan.Zero
 
-                        //ValidateIssuer = true,
-                        //ValidateAudience = true,
                         //ValidateLifetime = false,
-                        //ValidateIssuerSigningKey = true,
+                        //ValidateIssuer = true,
+                        //ValidateAudience = true,                        
                         //ValidIssuer = Configuration["ApplicationSettings:Client_URL"],
                         //ValidAudience = Configuration["ApplicationSettings:Client_URL"],
-                        //IssuerSigningKey = new SymmetricSecurityKey(key)
+
                     };
                 });
+
+            //services.AddScoped<IRepository<IEntity, string>, EntityRepository<IEntity, string>>();
+            //services.AddScoped<IRepository<IEntity, long>, EntityRepository<IEntity, long>>();
+            //services.AddScoped<IService<IEntity, string>, EntityService<IEntity, string>>();
+            //services.AddScoped<IService<IEntity, long>, EntityService<IEntity, long>>();
+
+            services.AddAutoMapper(typeof(Startup).Assembly);
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

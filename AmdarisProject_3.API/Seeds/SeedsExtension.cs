@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
-using AmdarisProject_3.Domain.Models.Auth;
+using AmdarisProject_3.Domain.Models;
 
 namespace AmdarisProject_3.API.Seeds
 {
@@ -18,7 +18,7 @@ namespace AmdarisProject_3.API.Seeds
             try
             {
                 var context = services.GetRequiredService<SocialMediaDbContext>();
-                var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                var userManager = services.GetRequiredService<UserManager<User>>();
                 context.Database.Migrate();
 
                 //await Seed.SeedSentimentReactions(context);

@@ -5,18 +5,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AmdarisProject_3.API
 {
-    public class SocialMediaDbContext : IdentityDbContext<ApplicationUser>
+    public class SocialMediaDbContext : IdentityDbContext<User>
     {
         public SocialMediaDbContext(DbContextOptions options) : base(options)
         {
         }
 
-        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-
-        public DbSet<AbstractReaction> AbstractReactions { get; set; }
+        public DbSet<User> AppUsers { get; set; }
+        public DbSet<Reaction> AbstractReactions { get; set; }
         public DbSet<CommentReaction> CommentReactions { get; set; }
         public DbSet<SentimentReaction> SentimentReactions { get; set; }
-        public DbSet<AbstractPost> AbstractPosts { get; set; }
+        public DbSet<Post> AbstractPosts { get; set; }
         public DbSet<TextPost> TextPosts { get; set; }
         public DbSet<VideoPost> VideoPosts { get; set; }
         public DbSet<ImagePost> ImagePosts { get; set; }
@@ -37,7 +36,7 @@ namespace AmdarisProject_3.API
                .WithMany(x => x.EventsParticipants)
                .UsingEntity(x => x.ToTable("EventsParticipants"));
 
-            modelBuilder.Entity<ApplicationUser>()
+            modelBuilder.Entity<User>()
                 .HasMany(x => x.Messages)
                 .WithOne(x => x.Sender)
                 .OnDelete(DeleteBehavior.Restrict);

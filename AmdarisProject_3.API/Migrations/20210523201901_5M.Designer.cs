@@ -21,7 +21,7 @@ namespace AmdarisProject_3.API.Migrations
                 .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("AmdarisProject_3.Domain.Models.AbstractPost", b =>
+            modelBuilder.Entity("AmdarisProject_3.Domain.Models.Post", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -50,10 +50,10 @@ namespace AmdarisProject_3.API.Migrations
 
                     b.ToTable("AbstractPosts");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("AbstractPost");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Post");
                 });
 
-            modelBuilder.Entity("AmdarisProject_3.Domain.Models.AbstractReaction", b =>
+            modelBuilder.Entity("AmdarisProject_3.Domain.Models.Reaction", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -79,7 +79,7 @@ namespace AmdarisProject_3.API.Migrations
 
                     b.ToTable("AbstractReactions");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("AbstractReaction");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Reaction");
                 });
 
             modelBuilder.Entity("AmdarisProject_3.Domain.Models.Auth.ApplicationUser", b =>
@@ -368,7 +368,7 @@ namespace AmdarisProject_3.API.Migrations
 
             modelBuilder.Entity("AmdarisProject_3.Domain.Models.ImagePost", b =>
                 {
-                    b.HasBaseType("AmdarisProject_3.Domain.Models.AbstractPost");
+                    b.HasBaseType("AmdarisProject_3.Domain.Models.Post");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
@@ -378,7 +378,7 @@ namespace AmdarisProject_3.API.Migrations
 
             modelBuilder.Entity("AmdarisProject_3.Domain.Models.TextPost", b =>
                 {
-                    b.HasBaseType("AmdarisProject_3.Domain.Models.AbstractPost");
+                    b.HasBaseType("AmdarisProject_3.Domain.Models.Post");
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
@@ -388,7 +388,7 @@ namespace AmdarisProject_3.API.Migrations
 
             modelBuilder.Entity("AmdarisProject_3.Domain.Models.VideoPost", b =>
                 {
-                    b.HasBaseType("AmdarisProject_3.Domain.Models.AbstractPost");
+                    b.HasBaseType("AmdarisProject_3.Domain.Models.Post");
 
                     b.Property<string>("VideoUrl")
                         .HasColumnType("nvarchar(max)");
@@ -398,7 +398,7 @@ namespace AmdarisProject_3.API.Migrations
 
             modelBuilder.Entity("AmdarisProject_3.Domain.Models.CommentReaction", b =>
                 {
-                    b.HasBaseType("AmdarisProject_3.Domain.Models.AbstractReaction");
+                    b.HasBaseType("AmdarisProject_3.Domain.Models.Reaction");
 
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
@@ -408,7 +408,7 @@ namespace AmdarisProject_3.API.Migrations
 
             modelBuilder.Entity("AmdarisProject_3.Domain.Models.SentimentReaction", b =>
                 {
-                    b.HasBaseType("AmdarisProject_3.Domain.Models.AbstractReaction");
+                    b.HasBaseType("AmdarisProject_3.Domain.Models.Reaction");
 
                     b.Property<string>("CareImageUrl")
                         .HasColumnType("nvarchar(max)");
@@ -422,7 +422,7 @@ namespace AmdarisProject_3.API.Migrations
                     b.HasDiscriminator().HasValue("SentimentReaction");
                 });
 
-            modelBuilder.Entity("AmdarisProject_3.Domain.Models.AbstractPost", b =>
+            modelBuilder.Entity("AmdarisProject_3.Domain.Models.Post", b =>
                 {
                     b.HasOne("AmdarisProject_3.Domain.Models.Auth.ApplicationUser", "Author")
                         .WithMany("AbstractPosts")
@@ -431,7 +431,7 @@ namespace AmdarisProject_3.API.Migrations
                     b.Navigation("Author");
                 });
 
-            modelBuilder.Entity("AmdarisProject_3.Domain.Models.AbstractReaction", b =>
+            modelBuilder.Entity("AmdarisProject_3.Domain.Models.Reaction", b =>
                 {
                     b.HasOne("AmdarisProject_3.Domain.Models.Auth.ApplicationUser", "Author")
                         .WithMany("AbstractReactions")

@@ -1,6 +1,9 @@
-﻿namespace AmdarisProject_3.Domain.Models.Auth
+﻿using AmdarisProject_3.Domain.Models.Auth;
+
+namespace AmdarisProject_3.Domain.Models.Dtos
+
 {
-    public class ApplicationUserModel
+    public class UserDto
     {
         public string UserName { get; set; }
         public string Email { get; set; }

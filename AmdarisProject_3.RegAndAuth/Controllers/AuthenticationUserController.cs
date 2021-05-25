@@ -1,4 +1,6 @@
 ﻿using AmdarisProject_3.Domain.Models.Auth;
+using AmdarisProject_3.Domain.Models.Dtos;
+using AmdarisProject_3.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -16,15 +18,15 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ApplicationUserController : ControllerBase
+    public class AuthenticationUserController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly AuthSettings _appSettings;
-        private readonly ILogger<ApplicationUserController> _logger;
+        private readonly ILogger<AuthenticationUserController> _logger;
 
-        public ApplicationUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
-                                         IOptions<AuthSettings> appSettings, ILogger<ApplicationUserController> logger)
+        public AuthenticationUserController(UserManager<User> userManager, SignInManager<User> signInManager,
+                                         IOptions<AuthSettings> appSettings, ILogger<AuthenticationUserController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -34,11 +36,11 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<Object> PostApplicationUser(ApplicationUserModel model)
+        public async Task<IActionResult> RegisterUser(UserDto model)
         {
             model.Role = RoleTypes.CUSTOMER;
 
-            var applicationUser = new ApplicationUser()
+            var user = new User()
             {
                 UserName = model.UserName,
                 Email = model.Email,
@@ -48,11 +50,11 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
             };
             try
             {
-                var result = await _userManager.CreateAsync(applicationUser, model.Password);
+                var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(applicationUser, Enum.GetName(model.Role));
-                    await _signInManager.SignInAsync(applicationUser, true);
+                    await _userManager.AddToRoleAsync(user, Enum.GetName(model.Role));
+                    await _signInManager.SignInAsync(user, true);
                     return Ok(new { result, message = "register successful" });
                 }
                 else
@@ -66,7 +68,7 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login(LoginUserModel model)
+        public async Task<IActionResult> LoginUser(LoginUserDto model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
@@ -100,7 +102,7 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
 
         [HttpPost]
         [Route("logout")]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> LogoutUser()
         {
             await _signInManager.SignOutAsync();
 

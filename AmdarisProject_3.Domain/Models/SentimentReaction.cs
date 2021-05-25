@@ -1,6 +1,6 @@
 ﻿namespace AmdarisProject_3.Domain.Models
 {
-    public class SentimentReaction : AbstractReaction
+    public class SentimentReaction : Reaction
     {
         public string LikeImageUrl { get; set; }
         public string LoveImageUrl { get; set; }

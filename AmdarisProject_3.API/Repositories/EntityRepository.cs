@@ -3,153 +3,120 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AmdarisProject_3.Domain.Models;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AmdarisProject_3.API.Repositories
 {
-    public class EntityRepository<IEntity, T> : IRepository<IEntity, T>
-    {  
-        public Task<ActionResult<IEntity>> CreateEntity(IEntity entity);
-        public Task<ActionResult<IEntity>> DeleteEntity(T identityKey);
-        public Task<ActionResult<IEntity>> DeleteEntity(IEntity entity);
+    public class EntityRepository<IEntity, T> : IRepository<IEntity, T> where IEntity : class
+    {
+        public readonly DbContext _context;
+        public readonly DbSet<IEntity> _entity;
+        public readonly IMapper _mapper;
 
-        public DbContext _context;
-        public DbSet<IEntity> _entity;
-
-        public EntityRepository(SocialMediaDbContext context)
+        public EntityRepository(SocialMediaDbContext context, IMapper mapper)
         {
             _context = context;
             _entity = _context.Set<IEntity>();
+            _mapper = mapper;
         }
 
-        // GET: api/Entities
-        public async Task<ActionResult<IEnumerable<IEntity>>> ReadEntities()
+        public async Task<ActionResult<IEnumerable<IEntity>>> GetEntities()
         {
             return await _entity.ToListAsync();
         }
 
-        // GET: api/Entity/5
-        public async Task<ActionResult<IEntity>> ReadEntity(T identityKey)
+        public async Task<ActionResult<IEntity>> GetEntity(T identityKey)
         {
             return await _entity.FindAsync(identityKey);            
         }
 
-        // PUT: api/Entity/5
-        public async Task<ActionResult<IEntity>> UpdateEntity(T identityKey, T user)
+        public async Task<ActionResult<IEntity>> CreateEntity(IEntity entity)            
         {
-            var entity = await _entity.FindAsync(identityKey);
-            if (entity == null)
+            try
             {
-                return BadRequestObjectResult();
+                _entity.Add(entity);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new DbUpdateException(ex.Message);
             }
 
-            ModifyUser(userBase, user);
+            return new OkObjectResult(new { entity = entity, message = $"Entity was created" });
+        }
 
+        public async Task<ActionResult<IEntity>> Save()
+        {
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException) when (!UserExists(id))
+            catch (DbUpdateException ex)
             {
-                throw;
+                throw new DbUpdateException(ex.Message);
             }
 
-            return userBase;
+            return new OkResult();
         }
 
-        // PATCH: api/Entity/5
-        public async Task<ActionResult<IEntity>> UpdateEntity(long id, IEntity)
+        public async Task<ActionResult<IEntity>> Remove(IEntity entity)
         {
-            var user = await _table.FindAsync(id);
-            if (user == null)
-            {
-                return user;
-            }
-
-            ModifyUserDTO(user, IEntity);
-
             try
             {
+                _context.Remove(entity);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException) when (!UserExists(id))
+            catch (DbUpdateException ex)
             {
-                throw;
+                throw new DbUpdateException(ex.Message);
             }
 
-            return IEntity;
+            return new OkResult();
         }
 
-        // POST: api/Entity
-        public async Task<ActionResult<IEntity>> CreateEntity(IEntity userDTO)
-        {
-            T user = UserDTOToUser(userDTO);
-            try
-            {
-                _table.Add(user);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                throw new DbUpdateException("Same Id exist!");
-            }
-
-            return user;
-        }
-
-        // DELETE: api/Entity/5
-        public async Task<ActionResult<IEntity>> DeleteEntity(long id)
-        {
-            var user = await _table.FindAsync(id);
-            if (user == null)
-            {
-                return user;
-            }
-
-            _table.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return UserToUserDTO(user);
-        }
-
-        private bool UserExists(long id)
-        {
-            if (_table.Find(id) != null)
-                return true;
-
-            return false;
-        }
-        
-
-        //public Task<ActionResult<IEntity>> CreateEntity(IEntity entity)
+        //public async Task<ActionResult<IEntity>> DeleteEntity(T identityKey)
         //{
-        //    throw new NotImplementedException();
+        //    var baseEntity = await _entity.FindAsync(identityKey);
+        //    if (baseEntity == null)
+        //    {
+        //        return new BadRequestObjectResult(new { message = $"Entity with identity key {identityKey} doesn't exist" });
+        //    }
+
+        //    try
+        //    {
+        //        _entity.Remove(baseEntity);
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateException ex)
+        //    {
+        //        throw new DbUpdateException(ex.Message);
+        //    }
+
+        //    return new OkObjectResult(new { entity = baseEntity, message = $"Entity was deleted" });
         //}
 
-        //public Task<ActionResult<IEntity>> DeleteEntity(T identityKey)
+        //public async Task<ActionResult<IEntity>> UpdateEntity(IEntity entity, T identityKey)
         //{
-        //    throw new NotImplementedException();
-        //}
+        //    var baseEntity = await _entity.FindAsync(identityKey);
+        //    if (baseEntity == null)
+        //    {
+        //        return new BadRequestObjectResult( new { message = $"Entity with identity key {identityKey} doesn't exist" });
+        //    }
 
-        //public Task<ActionResult<IEntity>> DeleteEntity(IEntity entity)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        //    _mapper.Map(entity, baseEntity);
 
-        //public Task<ActionResult<IEnumerable<IEntity>>> ReadEntities()
-        //{
-        //    throw new NotImplementedException();
-        //}
+        //    try
+        //    {                
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateException ex)
+        //    {
+        //        throw new DbUpdateException(ex.Message);
+        //    }
 
-        //public Task<ActionResult<IEntity>> ReadEntity(T identityKey)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task<ActionResult<IEntity>> UpdateEntity(T identityKey, IEntity entity)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        //    return new OkObjectResult(new {entity = baseEntity, message = $"Entity with identity key {identityKey} was modified" });
+        //}               
     }
 }

@@ -17,7 +17,7 @@ namespace AmdarisProject_3.Domain.Models
         public DateTime Modified { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
-        public virtual ICollection<ApplicationUser> Authors { get; set; }
-        public virtual ICollection<ApplicationUser> Participants { get; set; }
+        public virtual ICollection<User> Authors { get; set; }
+        public virtual ICollection<User> Participants { get; set; }
     }
 }

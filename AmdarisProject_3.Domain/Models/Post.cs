@@ -3,11 +3,12 @@ using AmdarisProject_3.Domain.Models.Auth;
 
 namespace AmdarisProject_3.Domain.Models
 {
-    public class AbstractReaction : IEntity
+    public abstract class Post : IEntity
     {
         public long Id { get; set; }
+        public string Title { get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
-        public ApplicationUser Author { get; set; }
+        public virtual User Author { get; set; }
     }
 }
