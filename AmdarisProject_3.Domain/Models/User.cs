@@ -18,7 +18,5 @@ namespace AmdarisProject_3.Domain.Models
         public virtual ICollection<Post> AbstractPosts { get; set; }
         public virtual ICollection<Reaction> AbstractReactions { get; set; }
         public virtual ICollection<Message> Messages { get; set; }
-        public virtual ICollection<User> Friends { get; set; }
-
     }
 }
