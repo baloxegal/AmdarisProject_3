@@ -11,15 +11,13 @@ namespace AmdarisProject_3.API.Repositories
 {
     public class EntityRepository<IEntity, T> : IRepository<IEntity, T> where IEntity : class
     {
-        public readonly DbContext _context;
-        public readonly DbSet<IEntity> _entity;
-        public readonly IMapper _mapper;
+        private readonly DbContext _context;
+        private readonly DbSet<IEntity> _entity;
 
-        public EntityRepository(SocialMediaDbContext context, IMapper mapper)
+        public EntityRepository(SocialMediaDbContext context)
         {
             _context = context;
             _entity = _context.Set<IEntity>();
-            _mapper = mapper;
         }
 
         public async Task<ActionResult<IEnumerable<IEntity>>> GetEntities()
@@ -74,6 +72,15 @@ namespace AmdarisProject_3.API.Repositories
             }
 
             return new OkResult();
+        }
+
+        public async Task<ActionResult<bool>> IsExist(IEntity entity)
+        {
+            var result = await _entity.ToListAsync();
+            if (result.Contains(entity))
+                return true;
+            else
+                return false;            
         }
 
         //public async Task<ActionResult<IEntity>> DeleteEntity(T identityKey)

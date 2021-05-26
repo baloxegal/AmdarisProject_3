@@ -11,41 +11,41 @@ namespace AmdarisProject_3.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PostController : ControllerBase
+    public class RelationshipController : ControllerBase
     {
-        //private readonly PostService _service;
+        //private readonly IService<Relationship, long> _service;
 
-        //public PostController(PostService service)
+        //public RelationshipController(IService<Relationship, long> service)
         //{
         //    _service = service;
         //}
 
         //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Post>>> GetEntities()
+        //public async Task<ActionResult<IEnumerable<Relationship>>> GetEntities()
         //{
         //    return await _service.GetEntities();
         //}
 
         //[HttpGet("{id}")]
-        //public async Task<ActionResult<Post>> GetEntity(long identityKey)
+        //public async Task<ActionResult<Relationship>> GetEntity(long identityKey)
         //{
         //    return await _service.GetEntity(identityKey);
         //}
 
         //[HttpPut("{id}")]
-        //public async Task<ActionResult<Post>> UpdateEntity(Post entity, long identityKey)
+        //public async Task<ActionResult<Relationship>> UpdateEntity(Relationship entity, long identityKey)
         //{
         //    return await _service.UpdateEntity(entity, identityKey);
         //}
 
         //[HttpPost]
-        //public async Task<ActionResult<Post>> CreateEntity(Post entity)
+        //public async Task<ActionResult<Relationship>> CreateEntity(Relationship entity)
         //{
         //    return await _service.CreateEntity(entity);
         //}
 
         //[HttpDelete("{id}")]
-        //public async Task<ActionResult<Post>> DeleteEntity(long identityKey)
+        //public async Task<ActionResult<Relationship>> DeleteEntity(long identityKey)
         //{
         //    return await _service.DeleteEntity(identityKey);
         //}

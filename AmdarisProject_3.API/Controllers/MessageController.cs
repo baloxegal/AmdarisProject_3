@@ -15,33 +15,33 @@ namespace AmdarisProject_3.API.Controllers
     [ApiController]
     public class MessageController : ControllerBase
     {
-        private readonly EntityService<Message, long> _service;
+        private readonly MessageService _service;
 
-        public MessageController(EntityService<Message, long> service)
+        public MessageController(MessageService service)
         {
             _service = service;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Message>>> GetEntities()
+        public async Task<ActionResult<IEnumerable<MessageDto>>> GetEntities()
         {
             return await _service.GetEntities();
         }
                 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Message>> GetEntity(long identityKey)
+        public async Task<ActionResult<MessageDto>> GetEntity(long identityKey)
         {
             return await _service.GetEntity(identityKey);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Message>> UpdateEntity(Message entity, long identityKey)
+        public async Task<ActionResult<Message>> UpdateEntity(MessageDto entity, long identityKey)
         {
             return await _service.UpdateEntity(entity, identityKey);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Message>> CreateEntity(Message entity)
+        public async Task<ActionResult<Message>> CreateEntity(MessageDto entity)
         {
             return await _service.CreateEntity(entity);
         }

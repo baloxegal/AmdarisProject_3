@@ -21,6 +21,7 @@ namespace AmdarisProject_3.API
         public DbSet<ImagePost> ImagePosts { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<Relationship> RelationShips { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -40,6 +41,8 @@ namespace AmdarisProject_3.API
                 .HasMany(x => x.Messages)
                 .WithOne(x => x.Sender)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<User>().HasAlternateKey(n => n.UserName);
 
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }

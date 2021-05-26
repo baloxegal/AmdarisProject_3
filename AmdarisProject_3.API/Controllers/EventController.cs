@@ -13,33 +13,33 @@ namespace AmdarisProject_3.API.Controllers
     [ApiController]
     public class EventController : ControllerBase
     {
-        private readonly EntityService<Event, long> _service;
+        private readonly EventService _service;
 
-        public EventController(EntityService<Event, long> service)
+        public EventController(EventService service)
         {
             _service = service;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Event>>> GetEntities()
+        public async Task<ActionResult<IEnumerable<EventDto>>> GetEntities()
         {
             return await _service.GetEntities();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Event>> GetEntity(long identityKey)
+        public async Task<ActionResult<EventDto>> GetEntity(long identityKey)
         {
             return await _service.GetEntity(identityKey);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Event>> UpdateEntity(Event entity, long identityKey)
+        public async Task<ActionResult<Event>> UpdateEntity(EventDto entity, long identityKey)
         {
             return await _service.UpdateEntity(entity, identityKey);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Event>> CreateEntity(Event entity)
+        public async Task<ActionResult<Event>> CreateEntity(EventDto entity)
         {
             return await _service.CreateEntity(entity);
         }

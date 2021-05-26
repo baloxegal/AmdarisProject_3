@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AmdarisProject_3.API.Migrations
 {
     [DbContext(typeof(SocialMediaDbContext))]
-    [Migration("20210525175301_7M")]
+    [Migration("20210526072154_7M")]
     partial class _7M
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -146,6 +146,37 @@ namespace AmdarisProject_3.API.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("Reaction");
                 });
 
+            modelBuilder.Entity("AmdarisProject_3.Domain.Models.Relationship", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("InitiatorId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("ModificationData")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RespondentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InitiatorId");
+
+                    b.HasIndex("RespondentId");
+
+                    b.ToTable("RelationShips");
+                });
+
             modelBuilder.Entity("AmdarisProject_3.Domain.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -203,14 +234,14 @@ namespace AmdarisProject_3.API.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("UserName");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -219,8 +250,6 @@ namespace AmdarisProject_3.API.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -476,11 +505,19 @@ namespace AmdarisProject_3.API.Migrations
                     b.Navigation("Author");
                 });
 
-            modelBuilder.Entity("AmdarisProject_3.Domain.Models.User", b =>
+            modelBuilder.Entity("AmdarisProject_3.Domain.Models.Relationship", b =>
                 {
-                    b.HasOne("AmdarisProject_3.Domain.Models.User", null)
-                        .WithMany("Friends")
-                        .HasForeignKey("UserId");
+                    b.HasOne("AmdarisProject_3.Domain.Models.User", "Initiator")
+                        .WithMany()
+                        .HasForeignKey("InitiatorId");
+
+                    b.HasOne("AmdarisProject_3.Domain.Models.User", "Respondent")
+                        .WithMany()
+                        .HasForeignKey("RespondentId");
+
+                    b.Navigation("Initiator");
+
+                    b.Navigation("Respondent");
                 });
 
             modelBuilder.Entity("EventUser", b =>
@@ -569,8 +606,6 @@ namespace AmdarisProject_3.API.Migrations
                     b.Navigation("AbstractPosts");
 
                     b.Navigation("AbstractReactions");
-
-                    b.Navigation("Friends");
 
                     b.Navigation("Messages");
                 });

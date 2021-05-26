@@ -15,6 +15,7 @@ using AmdarisProject_3.Domain.Models;
 using AmdarisProject_3.RegAndAuth;
 using AmdarisProject_3.API.Repositories;
 using AmdarisProject_3.API.Services;
+using AutoMapper;
 
 namespace AmdarisProject_3.API
 {
@@ -122,12 +123,23 @@ namespace AmdarisProject_3.API
                     };
                 });
 
-            //services.AddScoped<IRepository<IEntity, string>, EntityRepository<IEntity, string>>();
-            //services.AddScoped<IRepository<IEntity, long>, EntityRepository<IEntity, long>>();
-            //services.AddScoped<IService<IEntity, string>, EntityService<IEntity, string>>();
-            //services.AddScoped<IService<IEntity, long>, EntityService<IEntity, long>>();
+            services.AddScoped<IRepository<User, string>, EntityRepository<User, string>>();
+            services.AddScoped<IRepository<Event, long>, EntityRepository<Event, long>>();
+            services.AddScoped<IRepository<Message, long>, EntityRepository<Message, long>>();
+            services.AddScoped<UserService>();
+            services.AddScoped<EventService>();
+            services.AddScoped<MessageService>();
 
-            services.AddAutoMapper(typeof(Startup).Assembly);
+            //Mapper.Initialize(cfg => cfg.AddProfile<MappingProfile>());
+            //services.AddAutoMapper(typeof(Startup).Assembly);
+
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

@@ -13,41 +13,41 @@ namespace AmdarisProject_3.API.Controllers
     [ApiController]
     public class ReactionController : ControllerBase
     {
-        private readonly EntityService<Reaction, long> _service;
+        //private readonly IService<Reaction, long> _service;
 
-        public ReactionController(EntityService<Reaction, long> service)
-        {
-            _service = service;
-        }
+        //public ReactionController(IService<Reaction, long> service)
+        //{
+        //    _service = service;
+        //}
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Reaction>>> GetEntities()
-        {
-            return await _service.GetEntities();
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<Reaction>>> GetEntities()
+        //{
+        //    return await _service.GetEntities();
+        //}
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Reaction>> GetEntity(long identityKey)
-        {
-            return await _service.GetEntity(identityKey);
-        }
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<Reaction>> GetEntity(long identityKey)
+        //{
+        //    return await _service.GetEntity(identityKey);
+        //}
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Reaction>> UpdateEntity(Reaction entity, long identityKey)
-        {
-            return await _service.UpdateEntity(entity, identityKey);
-        }
+        //[HttpPut("{id}")]
+        //public async Task<ActionResult<Reaction>> UpdateEntity(Reaction entity, long identityKey)
+        //{
+        //    return await _service.UpdateEntity(entity, identityKey);
+        //}
 
-        [HttpPost]
-        public async Task<ActionResult<Reaction>> CreateEntity(Reaction entity)
-        {
-            return await _service.CreateEntity(entity);
-        }
+        //[HttpPost]
+        //public async Task<ActionResult<Reaction>> CreateEntity(Reaction entity)
+        //{
+        //    return await _service.CreateEntity(entity);
+        //}
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Reaction>> DeleteEntity(long identityKey)
-        {
-            return await _service.DeleteEntity(identityKey);
-        }
+        //[HttpDelete("{id}")]
+        //public async Task<ActionResult<Reaction>> DeleteEntity(long identityKey)
+        //{
+        //    return await _service.DeleteEntity(identityKey);
+        //}
     }
 }

@@ -86,6 +86,14 @@ namespace AmdarisProject_3.API.Migrations
                 principalTable: "Events",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.RenameTable(
+                name: "AbstractPosts",
+                newName: "Posts");
+
+            migrationBuilder.RenameTable(
+               name: "AbstractReactions",
+               newName: "Reactions");            
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

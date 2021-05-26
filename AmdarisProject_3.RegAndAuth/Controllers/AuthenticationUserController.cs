@@ -46,7 +46,8 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
                 FirstName = model.FirstName,
-                LastName = model.LastName
+                LastName = model.LastName,
+                Avatar = model.Avatar
             };
             try
             {

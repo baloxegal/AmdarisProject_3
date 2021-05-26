@@ -1,5 +1,7 @@
 ﻿using AmdarisProject_3.API.Services;
 using AmdarisProject_3.Domain.Models;
+using AmdarisProject_3.Domain.Models.Dtos;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,35 +15,38 @@ namespace AmdarisProject_3.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly EntityService<User, string> _service;
+        private readonly UserService _service;
+        private readonly IMapper _mapper;
 
-        public UserController(EntityService<User, string> service)
+        public UserController(UserService service, IMapper mapper)
         {
             _service = service;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetEntities()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetEntities()
         {
             return await _service.GetEntities();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetEntity(string identityKey)
+        public async Task<ActionResult<UserDto>> GetEntity(string identityKey)
         {
             return await _service.GetEntity(identityKey);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<User>> UpdateEntity(User entity, string identityKey)
+        public async Task<ActionResult<User>> UpdateEntity(UserDto entity, string identityKey)
         {
             return await _service.UpdateEntity(entity, identityKey);
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> CreateEntity(User entity)
+        public async Task<ActionResult<User>> CreateEntity(UserDto entity)
         {
-            return await _service.CreateEntity(entity);
+            var baseEntity =_mapper.Map(entity, new User());
+            return await _service.CreateEntity(baseEntity);
         }
 
         [HttpDelete("{id}")]

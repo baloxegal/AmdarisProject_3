@@ -1,5 +1,6 @@
 ﻿using AmdarisProject_3.API.Repositories;
 using AmdarisProject_3.Domain.Models;
+using AmdarisProject_3.Domain.Models.Dtos;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,46 +10,51 @@ using System.Threading.Tasks;
 
 namespace AmdarisProject_3.API.Services
 {
-    public class EntityService<IEntity, T> : ControllerBase, IService<IEntity, T> where IEntity : class
+    public class MessageService
     {
-        private readonly EntityRepository<IEntity, T> _repository;
-        public readonly IMapper _mapper;
-        public EntityService(EntityRepository<IEntity, T> repository, IMapper mapper)
+        private readonly IRepository<Message, long> _repository;
+        private readonly IMapper _mapper;
+
+        public MessageService(IRepository<Message, long> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        public async Task<ActionResult<IEnumerable<IEntity>>> GetEntities()
+        public async Task<ActionResult<IEnumerable<MessageDto>>> GetEntities()
         {
-            return await _repository.GetEntities();
+            var result = await _repository.GetEntities();
+
+            return result.Value.Select(res => _mapper.Map(res, new MessageDto())).ToList();             
         }
 
-        public async Task<ActionResult<IEntity>> GetEntity(T identityKey)
+        public async Task<ActionResult<MessageDto>> GetEntity(long identityKey)
         {
-            return await _repository.GetEntity(identityKey);
-        }       
+            var result = await _repository.GetEntity(identityKey);
 
-        public async Task<ActionResult<IEntity>> UpdateEntity(IEntity entity, T identityKey)
+            return _mapper.Map(result.Value, new MessageDto());
+        }
+
+        public async Task<ActionResult<Message>> UpdateEntity(MessageDto entity, long identityKey)
         {
-
             var baseEntity = await _repository.GetEntity(identityKey);
             if (baseEntity.Value == null)
             {
                 return new BadRequestObjectResult(new { message = $"Entity with identity key {identityKey} doesn't exist" });
             }
 
-            _mapper.Map(entity, baseEntity);
+            _mapper.Map(entity, baseEntity.Value);            
 
             return await _repository.Save();
         }
 
-        public async Task<ActionResult<IEntity>> CreateEntity(IEntity entity)
+        public async Task<ActionResult<Message>> CreateEntity(MessageDto entity)
         {
-            return await _repository.CreateEntity(entity);
-        }       
+            var baseEntity = _mapper.Map(entity, new Message());
+            return await _repository.CreateEntity(baseEntity);
+        }
 
-        public async Task<ActionResult<IEntity>> DeleteEntity(T identityKey)
+        public async Task<ActionResult<Message>> DeleteEntity(long identityKey)
         {
             var baseEntity = await _repository.GetEntity(identityKey);
             if (baseEntity.Value == null)
@@ -65,15 +71,5 @@ namespace AmdarisProject_3.API.Services
                 return new BadRequestObjectResult(new { message = $"Entity with identity key {identityKey} doesn't deleted. Error in database." });
             }
         }
-
-        //public async Task<ActionResult<IEntity>> UpdateEntity(IEntity entity, T identityKey)
-        //{
-        //    return await _repository.UpdateEntity(entity, identityKey);
-        //}
-
-        //public async Task<ActionResult<IEntity>> DeleteEntity(T identityKey)
-        //{
-        //    return await _repository.DeleteEntity(identityKey);
-        //}
     }
 }
