@@ -1,9 +1,8 @@
 ﻿using AmdarisProject_3.Domain.Models;
-using AmdarisProject_3.Domain.Models.Auth;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace AmdarisProject_3.API
+namespace AmdarisProject_3.Infrastucture
 {
     public class SocialMediaDbContext : IdentityDbContext<User>
     {
@@ -12,10 +11,10 @@ namespace AmdarisProject_3.API
         }
 
         public DbSet<User> AppUsers { get; set; }
-        public DbSet<Reaction> AbstractReactions { get; set; }
+        public DbSet<Reaction> Reactions { get; set; }
         public DbSet<CommentReaction> CommentReactions { get; set; }
         public DbSet<SentimentReaction> SentimentReactions { get; set; }
-        public DbSet<Post> AbstractPosts { get; set; }
+        public DbSet<Post> Posts { get; set; }
         public DbSet<TextPost> TextPosts { get; set; }
         public DbSet<VideoPost> VideoPosts { get; set; }
         public DbSet<ImagePost> ImagePosts { get; set; }

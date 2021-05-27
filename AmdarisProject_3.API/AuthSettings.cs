@@ -1,4 +1,4 @@
-﻿namespace AmdarisProject_3.RegAndAuth
+﻿namespace AmdarisProject_3.API
 {
     public class AuthSettings
     {

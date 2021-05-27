@@ -1,4 +1,4 @@
-using AmdarisProject_3.API.Seeds;
+using AmdarisProject_3.Infrastucture.Seeds;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;

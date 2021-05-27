@@ -13,41 +13,41 @@ namespace AmdarisProject_3.API.Controllers
     [ApiController]
     public class RelationshipController : ControllerBase
     {
-        //private readonly IService<Relationship, long> _service;
+        private readonly RelationshipService _service;
 
-        //public RelationshipController(IService<Relationship, long> service)
-        //{
-        //    _service = service;
-        //}
+        public RelationshipController(RelationshipService service)
+        {
+            _service = service;
+        }
 
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Relationship>>> GetEntities()
-        //{
-        //    return await _service.GetEntities();
-        //}
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<RelationshipDto>>> GetEntities()
+        {
+            return await _service.GetEntities();
+        }
 
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Relationship>> GetEntity(long identityKey)
-        //{
-        //    return await _service.GetEntity(identityKey);
-        //}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<RelationshipDto>> GetEntity(long identityKey)
+        {
+            return await _service.GetEntity(identityKey);
+        }
 
-        //[HttpPut("{id}")]
-        //public async Task<ActionResult<Relationship>> UpdateEntity(Relationship entity, long identityKey)
-        //{
-        //    return await _service.UpdateEntity(entity, identityKey);
-        //}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateEntity(RelationshipDto entity, long identityKey)
+        {
+            return await _service.UpdateEntity(entity, identityKey);
+        }
 
-        //[HttpPost]
-        //public async Task<ActionResult<Relationship>> CreateEntity(Relationship entity)
-        //{
-        //    return await _service.CreateEntity(entity);
-        //}
+        [HttpPost]
+        public async Task<IActionResult> CreateEntity(RelationshipDto entity)
+        {
+            return await _service.CreateEntity(entity);
+        }
 
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<Relationship>> DeleteEntity(long identityKey)
-        //{
-        //    return await _service.DeleteEntity(identityKey);
-        //}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteEntity(long identityKey)
+        {
+            return await _service.DeleteEntity(identityKey);
+        }
     }
 }

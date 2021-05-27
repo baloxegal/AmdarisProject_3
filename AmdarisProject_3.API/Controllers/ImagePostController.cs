@@ -11,35 +11,35 @@ namespace AmdarisProject_3.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventController : ControllerBase
+    public class ImagePostController : ControllerBase
     {
-        private readonly EventService _service;
+        private readonly ImagePostService _service;
 
-        public EventController(EventService service)
+        public ImagePostController(ImagePostService service)
         {
             _service = service;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EventDto>>> GetEntities()
+        public async Task<ActionResult<IEnumerable<ImagePostDto>>> GetEntities()
         {
             return await _service.GetEntities();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<EventDto>> GetEntity(long identityKey)
+        public async Task<ActionResult<ImagePostDto>> GetEntity(long identityKey)
         {
             return await _service.GetEntity(identityKey);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateEntity(EventDto entity, long identityKey)
+        public async Task<IActionResult> UpdateEntity(ImagePostDto entity, long identityKey)
         {
             return await _service.UpdateEntity(entity, identityKey);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateEntity(EventDto entity)
+        public async Task<IActionResult> CreateEntity(ImagePostDto entity)
         {
             return await _service.CreateEntity(entity);
         }

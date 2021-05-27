@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AmdarisProject_3.Domain.Models.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,8 @@ namespace AmdarisProject_3.Domain.Models
 {
     public class RelationshipDto
     {
-        public string InitiatorId { get; set; }
-        public string RespondentId { get; set; }
+        public UserDto Initiator { get; set; }
+        public UserDto Respondent { get; set; }
         public DateTime Start { get; set; }        
         public RelationshipStatuses Status { get; set; }
         public DateTime ModificationData { get; set; }

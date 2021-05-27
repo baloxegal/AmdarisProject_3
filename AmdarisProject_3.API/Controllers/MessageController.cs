@@ -27,7 +27,7 @@ namespace AmdarisProject_3.API.Controllers
         {
             return await _service.GetEntities();
         }
-                
+
         [HttpGet("{id}")]
         public async Task<ActionResult<MessageDto>> GetEntity(long identityKey)
         {
@@ -35,19 +35,19 @@ namespace AmdarisProject_3.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Message>> UpdateEntity(MessageDto entity, long identityKey)
+        public async Task<IActionResult> UpdateEntity(MessageDto entity, long identityKey)
         {
             return await _service.UpdateEntity(entity, identityKey);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Message>> CreateEntity(MessageDto entity)
+        public async Task<IActionResult> CreateEntity(MessageDto entity)
         {
             return await _service.CreateEntity(entity);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Message>> DeleteEntity(long identityKey)
+        public async Task<IActionResult> DeleteEntity(long identityKey)
         {
             return await _service.DeleteEntity(identityKey);
         }

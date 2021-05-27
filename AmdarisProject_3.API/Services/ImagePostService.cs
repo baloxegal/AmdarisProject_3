@@ -10,32 +10,32 @@ using System.Threading.Tasks;
 
 namespace AmdarisProject_3.API.Services
 {
-    public class MessageService
+    public class ImagePostService
     {
-        private readonly IRepository<Message, long> _repository;
+        private readonly IRepository<ImagePost, long> _repository;
         private readonly IMapper _mapper;
 
-        public MessageService(IRepository<Message, long> repository, IMapper mapper)
+        public ImagePostService(IRepository<ImagePost, long> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        public async Task<ActionResult<IEnumerable<MessageDto>>> GetEntities()
+        public async Task<ActionResult<IEnumerable<ImagePostDto>>> GetEntities()
         {
             var result = await _repository.GetEntities();
 
-            return result.Value.Select(res => _mapper.Map(res, new MessageDto())).ToList();             
+            return result.Value.Select(res => _mapper.Map(res, new ImagePostDto())).ToList();             
         }
 
-        public async Task<ActionResult<MessageDto>> GetEntity(long identityKey)
+        public async Task<ActionResult<ImagePostDto>> GetEntity(long identityKey)
         {
             var result = await _repository.GetEntity(identityKey);
 
-            return _mapper.Map(result.Value, new MessageDto());
+            return _mapper.Map(result.Value, new ImagePostDto());
         }
 
-        public async Task<IActionResult> UpdateEntity(MessageDto entity, long identityKey)
+        public async Task<IActionResult> UpdateEntity(ImagePostDto entity, long identityKey)
         {
             var baseEntity = await _repository.GetEntity(identityKey);
             if (baseEntity.Value == null)
@@ -48,9 +48,9 @@ namespace AmdarisProject_3.API.Services
             return await _repository.Save();
         }
 
-        public async Task<IActionResult> CreateEntity(MessageDto entity)
+        public async Task<IActionResult> CreateEntity(ImagePostDto entity)
         {
-            var baseEntity = _mapper.Map(entity, new Message());
+            var baseEntity = _mapper.Map(entity, new ImagePost());
             try
             {
                 return await _repository.CreateEntity(baseEntity);

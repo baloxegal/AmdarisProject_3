@@ -10,32 +10,32 @@ using System.Threading.Tasks;
 
 namespace AmdarisProject_3.API.Services
 {
-    public class MessageService
+    public class RelationshipService
     {
-        private readonly IRepository<Message, long> _repository;
+        private readonly IRepository<Relationship, long> _repository;
         private readonly IMapper _mapper;
 
-        public MessageService(IRepository<Message, long> repository, IMapper mapper)
+        public RelationshipService(IRepository<Relationship, long> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        public async Task<ActionResult<IEnumerable<MessageDto>>> GetEntities()
+        public async Task<ActionResult<IEnumerable<RelationshipDto>>> GetEntities()
         {
             var result = await _repository.GetEntities();
 
-            return result.Value.Select(res => _mapper.Map(res, new MessageDto())).ToList();             
+            return result.Value.Select(res => _mapper.Map(res, new RelationshipDto())).ToList();             
         }
 
-        public async Task<ActionResult<MessageDto>> GetEntity(long identityKey)
+        public async Task<ActionResult<RelationshipDto>> GetEntity(long identityKey)
         {
             var result = await _repository.GetEntity(identityKey);
 
-            return _mapper.Map(result.Value, new MessageDto());
+            return _mapper.Map(result.Value, new RelationshipDto());
         }
 
-        public async Task<IActionResult> UpdateEntity(MessageDto entity, long identityKey)
+        public async Task<IActionResult> UpdateEntity(RelationshipDto entity, long identityKey)
         {
             var baseEntity = await _repository.GetEntity(identityKey);
             if (baseEntity.Value == null)
@@ -43,14 +43,14 @@ namespace AmdarisProject_3.API.Services
                 return new BadRequestObjectResult(new { message = $"Entity with identity key {identityKey} doesn't exist" });
             }
 
-            _mapper.Map(entity, baseEntity.Value);            
+            _mapper.Map(entity, baseEntity.Value);
 
             return await _repository.Save();
         }
 
-        public async Task<IActionResult> CreateEntity(MessageDto entity)
+        public async Task<IActionResult> CreateEntity(RelationshipDto entity)
         {
-            var baseEntity = _mapper.Map(entity, new Message());
+            var baseEntity = _mapper.Map(entity, new Relationship());
             try
             {
                 return await _repository.CreateEntity(baseEntity);

@@ -1,12 +1,8 @@
 ﻿using AmdarisProject_3.Domain.Models.Dtos;
+using AmdarisProject_3.Domain.Models;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace AmdarisProject_3.Domain.Models
+namespace AmdarisProject_3.Domain
 {
     public class MappingProfile : Profile
     {
@@ -19,38 +15,55 @@ namespace AmdarisProject_3.Domain.Models
 
             CreateMap<User, UserDto>();
 
-            CreateMap<CommentReactionDto, CommentReaction>();
-
-            CreateMap<CommentReaction, CommentReactionDto>();
-
-            CreateMap<SentimentReactionDto, SentimentReaction>();
-
-            CreateMap<SentimentReaction, SentimentReactionDto>();
-
             CreateMap<EventDto, Event>();
-                /*.ForMember(x => x.Authors, y => y.MapFrom(z => z.Authors))*/
 
             CreateMap<Event, EventDto>();
 
-            CreateMap<ImagePostDto, ImagePost>();
+            CreateMap<CommentReactionDto, CommentReaction>()
+                .ForMember(x => x.Author, y => y.MapFrom(z => z.Author));
 
-            CreateMap<ImagePost, ImagePostDto>();
+            CreateMap<CommentReaction, CommentReactionDto>()
+                .ForMember(x => x.Author, y => y.MapFrom(z => z.Author));
 
-            CreateMap<VideoPostDto, VideoPost>();
+            CreateMap<SentimentReactionDto, SentimentReaction>()
+                .ForMember(x => x.Author, y => y.MapFrom(z => z.Author));
 
-            CreateMap<VideoPost, VideoPostDto>();
+            CreateMap<SentimentReaction, SentimentReactionDto>()
+                .ForMember(x => x.Author, y => y.MapFrom(z => z.Author));
 
-            CreateMap<TextPostDto, TextPost>();
+            CreateMap<ImagePostDto, ImagePost>()
+                .ForMember(x => x.Author, y => y.MapFrom(z => z.Author));
 
-            CreateMap<TextPost, TextPostDto>();
+            CreateMap<ImagePost, ImagePostDto>()
+                .ForMember(x => x.Author, y => y.MapFrom(z => z.Author));
 
-            CreateMap<MessageDto, Message>();
+            CreateMap<VideoPostDto, VideoPost>()
+                .ForMember(x => x.Author, y => y.MapFrom(z => z.Author));
 
-            CreateMap<Message, MessageDto>();
+            CreateMap<VideoPost, VideoPostDto>()
+                .ForMember(x => x.Author, y => y.MapFrom(z => z.Author));
 
-            CreateMap<RelationshipDto, Relationship>();
+            CreateMap<TextPostDto, TextPost>()
+                .ForMember(x => x.Author, y => y.MapFrom(z => z.Author));
 
-            CreateMap<Relationship, RelationshipDto>();
+            CreateMap<TextPost, TextPostDto>()
+                .ForMember(x => x.Author, y => y.MapFrom(z => z.Author));
+
+            CreateMap<MessageDto, Message>()
+                .ForMember(x => x.Sender, y => y.MapFrom(z => z.Sender))
+                .ForMember(x => x.Receiver, y => y.MapFrom(z => z.Receiver));
+
+            CreateMap<Message, MessageDto>()
+                .ForMember(x => x.Sender, y => y.MapFrom(z => z.Sender))
+                .ForMember(x => x.Receiver, y => y.MapFrom(z => z.Receiver));
+
+            CreateMap<RelationshipDto, Relationship>()
+                .ForMember(x => x.Initiator, y => y.MapFrom(z => z.Initiator))
+                .ForMember(x => x.Respondent, y => y.MapFrom(z => z.Respondent));
+
+            CreateMap<Relationship, RelationshipDto>()
+                .ForMember(x => x.Initiator, y => y.MapFrom(z => z.Initiator))
+                .ForMember(x => x.Respondent, y => y.MapFrom(z => z.Respondent));
         }
     }
 }

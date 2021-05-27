@@ -12,10 +12,11 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Text;
 using AmdarisProject_3.Domain.Models;
-using AmdarisProject_3.RegAndAuth;
-using AmdarisProject_3.API.Repositories;
+using AmdarisProject_3.Infrastucture.Repositories;
 using AmdarisProject_3.API.Services;
 using AutoMapper;
+using AmdarisProject_3.Domain;
+using AmdarisProject_3.Infrastucture;
 
 namespace AmdarisProject_3.API
 {
@@ -126,9 +127,21 @@ namespace AmdarisProject_3.API
             services.AddScoped<IRepository<User, string>, EntityRepository<User, string>>();
             services.AddScoped<IRepository<Event, long>, EntityRepository<Event, long>>();
             services.AddScoped<IRepository<Message, long>, EntityRepository<Message, long>>();
+            services.AddScoped<IRepository<CommentReaction, long>, EntityRepository<CommentReaction, long>>();
+            services.AddScoped<IRepository<SentimentReaction, long>, EntityRepository<SentimentReaction, long>>();
+            services.AddScoped<IRepository<TextPost, long>, EntityRepository<TextPost, long>>();
+            services.AddScoped<IRepository<ImagePost, long>, EntityRepository<ImagePost, long>>();
+            services.AddScoped<IRepository<VideoPost, long>, EntityRepository<VideoPost, long>>();
+            services.AddScoped<IRepository<Relationship, long>, EntityRepository<Relationship, long>>();
             services.AddScoped<UserService>();
             services.AddScoped<EventService>();
             services.AddScoped<MessageService>();
+            services.AddScoped<CommentReactionService>();
+            services.AddScoped<SentimentReactionService>();
+            services.AddScoped<TextPostService>();
+            services.AddScoped<ImagePostService>();
+            services.AddScoped<VideoPostService>();
+            services.AddScoped<RelationshipService>();
 
             //Mapper.Initialize(cfg => cfg.AddProfile<MappingProfile>());
             //services.AddAutoMapper(typeof(Startup).Assembly);

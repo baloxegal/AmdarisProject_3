@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AmdarisProject_3.API.Seeds
+namespace AmdarisProject_3.Infrastucture.Seeds
 {
     public class Seed
     {

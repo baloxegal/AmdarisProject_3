@@ -1,6 +1,6 @@
-﻿using AmdarisProject_3.API.Repositories;
-using AmdarisProject_3.Domain.Models;
+﻿using AmdarisProject_3.Domain.Models;
 using AmdarisProject_3.Domain.Models.Dtos;
+using AmdarisProject_3.Infrastucture.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -35,7 +35,7 @@ namespace AmdarisProject_3.API.Services
             return _mapper.Map(result.Value, new EventDto());
         }
 
-        public async Task<ActionResult<Event>> UpdateEntity(EventDto entity, long identityKey)
+        public async Task<IActionResult> UpdateEntity(EventDto entity, long identityKey)
         {
             var baseEntity = await _repository.GetEntity(identityKey);
             if (baseEntity.Value == null)
@@ -43,18 +43,25 @@ namespace AmdarisProject_3.API.Services
                 return new BadRequestObjectResult(new { message = $"Entity with identity key {identityKey} doesn't exist" });
             }
 
-            _mapper.Map(entity, baseEntity.Value);            
+            _mapper.Map(entity, baseEntity.Value);
 
             return await _repository.Save();
         }
 
-        public async Task<ActionResult<Event>> CreateEntity(EventDto entity)
+        public async Task<IActionResult> CreateEntity(EventDto entity)
         {
             var baseEntity = _mapper.Map(entity, new Event());
-            return await _repository.CreateEntity(baseEntity);
+            try
+            {
+                return await _repository.CreateEntity(baseEntity);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(new { message = $"Entity wasn't created. " + ex.Message });
+            }
         }
 
-        public async Task<ActionResult<Event>> DeleteEntity(long identityKey)
+        public async Task<IActionResult> DeleteEntity(long identityKey)
         {
             var baseEntity = await _repository.GetEntity(identityKey);
             if (baseEntity.Value == null)
@@ -66,9 +73,9 @@ namespace AmdarisProject_3.API.Services
             {
                 return await _repository.Remove(baseEntity.Value);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return new BadRequestObjectResult(new { message = $"Entity with identity key {identityKey} doesn't deleted. Error in database." });
+                return new BadRequestObjectResult(new { message = $"Entity with identity key {identityKey} doesn't deleted. Error in database. " + ex.Message });
             }
         }
     }

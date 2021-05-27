@@ -14,7 +14,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AmdarisProject_3.RegAndAuth.Controllers
+namespace AmdarisProject_3.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -75,7 +75,7 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 var role = await _userManager.GetRolesAsync(user);
-                IdentityOptions _options = new IdentityOptions();
+                var _options = new IdentityOptions();
 
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
@@ -111,13 +111,3 @@ namespace AmdarisProject_3.RegAndAuth.Controllers
         }
     }
 }
-
-
-//{
-//  "userName": "Baloxegal",
-//  "email": "baloxegal@gmail.com",
-//  "password": "Baloxegal510212",
-//  "phoneNumber": "+37376706061",
-//  "firstName": "Valeriu",
-//  "lastName": "Balan"
-//}

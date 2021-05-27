@@ -1,5 +1,4 @@
 ﻿using System;
-using AmdarisProject_3.Domain.Models.Auth;
 
 namespace AmdarisProject_3.Domain.Models
 {

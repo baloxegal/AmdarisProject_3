@@ -10,32 +10,32 @@ using System.Threading.Tasks;
 
 namespace AmdarisProject_3.API.Services
 {
-    public class MessageService
+    public class SentimentReactionService
     {
-        private readonly IRepository<Message, long> _repository;
+        private readonly IRepository<SentimentReaction, long> _repository;
         private readonly IMapper _mapper;
 
-        public MessageService(IRepository<Message, long> repository, IMapper mapper)
+        public SentimentReactionService(IRepository<SentimentReaction, long> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        public async Task<ActionResult<IEnumerable<MessageDto>>> GetEntities()
+        public async Task<ActionResult<IEnumerable<SentimentReactionDto>>> GetEntities()
         {
             var result = await _repository.GetEntities();
 
-            return result.Value.Select(res => _mapper.Map(res, new MessageDto())).ToList();             
+            return result.Value.Select(res => _mapper.Map(res, new SentimentReactionDto())).ToList();             
         }
 
-        public async Task<ActionResult<MessageDto>> GetEntity(long identityKey)
+        public async Task<ActionResult<SentimentReactionDto>> GetEntity(long identityKey)
         {
             var result = await _repository.GetEntity(identityKey);
 
-            return _mapper.Map(result.Value, new MessageDto());
+            return _mapper.Map(result.Value, new SentimentReactionDto());
         }
 
-        public async Task<IActionResult> UpdateEntity(MessageDto entity, long identityKey)
+        public async Task<IActionResult> UpdateEntity(SentimentReactionDto entity, long identityKey)
         {
             var baseEntity = await _repository.GetEntity(identityKey);
             if (baseEntity.Value == null)
@@ -48,9 +48,9 @@ namespace AmdarisProject_3.API.Services
             return await _repository.Save();
         }
 
-        public async Task<IActionResult> CreateEntity(MessageDto entity)
+        public async Task<IActionResult> CreateEntity(SentimentReactionDto entity)
         {
-            var baseEntity = _mapper.Map(entity, new Message());
+            var baseEntity = _mapper.Map(entity, new SentimentReaction());
             try
             {
                 return await _repository.CreateEntity(baseEntity);

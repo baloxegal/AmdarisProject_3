@@ -46,12 +46,12 @@ namespace AmdarisProject_3.API.Migrations
                 name: "EventsParticipants",
                 columns: table => new
                 {
-                    EventsParticipantsId = table.Column<long>(type: "bigint", nullable: false),
+                    EventsId = table.Column<long>(type: "bigint", nullable: false),
                     ParticipantsId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EventsParticipants", x => new { x.EventsParticipantsId, x.ParticipantsId });
+                    table.PrimaryKey("PK_EventsParticipants", x => new { x.EventsId, x.ParticipantsId });
                     table.ForeignKey(
                         name: "FK_EventsParticipants_AspNetUsers_ParticipantsId",
                         column: x => x.ParticipantsId,
@@ -59,8 +59,8 @@ namespace AmdarisProject_3.API.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EventsParticipants_Events_EventsParticipantsId",
-                        column: x => x.EventsParticipantsId,
+                        name: "FK_EventsParticipants_Events_EventsId",
+                        column: x => x.EventsId,
                         principalTable: "Events",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);

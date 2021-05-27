@@ -1,6 +1,6 @@
-﻿using AmdarisProject_3.API.Repositories;
-using AmdarisProject_3.Domain.Models;
+﻿using AmdarisProject_3.Domain.Models;
 using AmdarisProject_3.Domain.Models.Dtos;
+using AmdarisProject_3.Infrastucture.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -35,10 +35,10 @@ namespace AmdarisProject_3.API.Services
             return _mapper.Map(result.Value, new UserDto());
         }
 
-        public async Task<ActionResult<User>> GetEntityByUserName(string userNameKey)
+        public async Task<ActionResult<UserDto>> GetEntityByUserName(string userNameKey)
         {
             var result = await _repository.GetEntities();
-            if(result.Value == null && result.Value.Count() == 0)
+            if(result.Value == null && result.Value.Any())
                 return new BadRequestObjectResult(new { message = $"Entity with userName key {userNameKey} doesn't exist" });
 
             var resultList = result.Value.ToList();
@@ -51,7 +51,7 @@ namespace AmdarisProject_3.API.Services
                 return new BadRequestObjectResult(new { message = $"Entity with userName key {userNameKey} doesn't exist" });
         }
 
-        public async Task<ActionResult<User>> UpdateEntity(UserDto entity, string identityKey)
+        public async Task<IActionResult> UpdateEntity(UserDto entity, string identityKey)
         {
             var baseEntity = await _repository.GetEntity(identityKey);
             if (baseEntity.Value == null)
@@ -59,15 +59,15 @@ namespace AmdarisProject_3.API.Services
                 return new BadRequestObjectResult(new { message = $"Entity with identity key {identityKey} doesn't exist" });
             }
 
-            _mapper.Map(entity, baseEntity.Value);            
+            _mapper.Map(entity, baseEntity.Value);
 
-            return await _repository.Save();
+            return await _repository.Save(); ;
         }
 
-        public async Task<ActionResult<User>> UpdateEntityByUserName(UserDto entity, string userNameKey)
+        public async Task<IActionResult> UpdateEntityByUserName(UserDto entity, string userNameKey)
         {
             var result = await _repository.GetEntities();
-            if (result.Value == null && result.Value.Count() == 0)
+            if (result.Value == null && result.Value.Any())
                 return new BadRequestObjectResult(new { message = $"Entity with userName key {userNameKey} doesn't exist" });
 
             var resultList = result.Value.ToList();
@@ -76,23 +76,28 @@ namespace AmdarisProject_3.API.Services
             {
                 var resultUser = resultList.Find(e => e.UserName == userNameKey);
 
-                _mapper.Map(entity, resultUser);
+                _mapper.Map(entity, resultUser);                
 
-                await _repository.Save();
-
-                return new OkObjectResult(new { message = $"Entity with userName key {userNameKey} found" });
+                return await _repository.Save();
             }
             else
                 return new BadRequestObjectResult(new { message = $"Entity with userName key {userNameKey} doesn't exist" });
         }
 
-        public async Task<ActionResult<User>> CreateEntity(User entity)
+        public async Task<IActionResult> CreateEntity(UserDto entity)
         {
             var baseEntity = _mapper.Map(entity, new User());
-            return await _repository.CreateEntity(baseEntity);
+            try
+            {
+                return await _repository.CreateEntity(baseEntity);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(new { message = $"Entity wasn't created. " + ex.Message });
+            }
         }
 
-        public async Task<ActionResult<User>> DeleteEntity(string identityKey)
+        public async Task<IActionResult> DeleteEntity(string identityKey)
         {
             var baseEntity = await _repository.GetEntity(identityKey);
             if (baseEntity.Value == null)
@@ -104,20 +109,34 @@ namespace AmdarisProject_3.API.Services
             {
                 return await _repository.Remove(baseEntity.Value);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return new BadRequestObjectResult(new { message = $"Entity with identity key {identityKey} doesn't deleted. Error in database." });
+                return new BadRequestObjectResult(new { message = $"Entity with identity key {identityKey} doesn't deleted. Error in database. " + ex.Message });
             }
         }
 
-        //public async Task<ActionResult<IEntity>> UpdateEntity(IEntity entity, T identityKey)
-        //{
-        //    return await _repository.UpdateEntity(entity, identityKey);
-        //}
+        public async Task<IActionResult> DeleteEntityByUserName(string userNameKey)
+        {
+            var result = await _repository.GetEntities();
+            if (result.Value == null && result.Value.Any())
+                return new BadRequestObjectResult(new { message = $"Entity with userName key {userNameKey} doesn't exist" });
 
-        //public async Task<ActionResult<IEntity>> DeleteEntity(T identityKey)
-        //{
-        //    return await _repository.DeleteEntity(identityKey);
-        //}
+            var resultList = result.Value.ToList();
+
+            if (resultList.Exists(e => e.UserName == userNameKey))
+            {
+                var resultUser = resultList.Find(e => e.UserName == userNameKey);
+                try
+                {
+                    return await _repository.Remove(resultUser);
+                }
+                catch (Exception ex)
+                {
+                    return new BadRequestObjectResult(new { message = $"Entity with identity key {userNameKey} doesn't deleted. Error in database. " + ex.Message });
+                }
+            }
+            else
+                return new BadRequestObjectResult(new { message = $"Entity with userName key {userNameKey} doesn't exist" }); 
+        }
     }
 }
