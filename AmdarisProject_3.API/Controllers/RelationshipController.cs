@@ -1,10 +1,7 @@
 ﻿using AmdarisProject_3.API.Services;
 using AmdarisProject_3.Domain.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace AmdarisProject_3.API.Controllers
@@ -21,15 +18,17 @@ namespace AmdarisProject_3.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RelationshipDto>>> GetEntities()
+        public async Task<IEnumerable<RelationshipDto>> GetEntities()
         {
-            return await _service.GetEntities();
+            var result = await _service.GetEntities();
+            return result.Value;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<RelationshipDto>> GetEntity(long identityKey)
+        public async Task<RelationshipDto> GetEntity(long identityKey)
         {
-            return await _service.GetEntity(identityKey);
+            var result = await _service.GetEntity(identityKey);
+            return result.Value;
         }
 
         [HttpPut("{id}")]

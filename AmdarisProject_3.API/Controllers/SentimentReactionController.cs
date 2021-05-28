@@ -23,15 +23,17 @@ namespace AmdarisProject_3.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SentimentReactionDto>>> GetEntities()
+        public async Task<IEnumerable<SentimentReactionDto>> GetEntities()
         {
-            return await _service.GetEntities();
+            var result = await _service.GetEntities();
+            return result.Value;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<SentimentReactionDto>> GetEntity(long identityKey)
+        public async Task<SentimentReactionDto> GetEntity(long identityKey)
         {
-            return await _service.GetEntity(identityKey);
+            var result = await _service.GetEntity(identityKey);
+            return result.Value;
         }
 
         [HttpPut("{id}")]

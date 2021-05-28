@@ -2,6 +2,7 @@
 using AmdarisProject_3.Domain.Models.Dtos;
 using AmdarisProject_3.Infrastucture.Repositories;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,26 +14,33 @@ namespace AmdarisProject_3.API.Services
     public class EventService
     {
         private readonly IRepository<Event, long> _repository;
+        private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
 
-        public EventService(IRepository<Event, long> repository, IMapper mapper)
+        public EventService(IRepository<Event, long> repository, UserManager<User> userManager, IMapper mapper)
         {
             _repository = repository;
+            _userManager = userManager;
             _mapper = mapper;
         }
 
         public async Task<ActionResult<IEnumerable<EventDto>>> GetEntities()
         {
             var result = await _repository.GetEntities();
+            var listResult = result.Value.ToList();
 
-            return result.Value.Select(res => _mapper.Map(res, new EventDto())).ToList();             
+            var dtoResult = listResult.Select(res => _mapper.Map(res, new EventDto())).ToList();
+            
+            return dtoResult;
         }
 
         public async Task<ActionResult<EventDto>> GetEntity(long identityKey)
         {
             var result = await _repository.GetEntity(identityKey);
 
-            return _mapper.Map(result.Value, new EventDto());
+            var dtoResult = _mapper.Map(result.Value, new EventDto());
+
+            return dtoResult;
         }
 
         public async Task<IActionResult> UpdateEntity(EventDto entity, long identityKey)

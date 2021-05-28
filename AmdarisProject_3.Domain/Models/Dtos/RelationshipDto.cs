@@ -1,18 +1,13 @@
-﻿using AmdarisProject_3.Domain.Models.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace AmdarisProject_3.Domain.Models
 {
     public class RelationshipDto
     {
-        public UserDto Initiator { get; set; }
-        public UserDto Respondent { get; set; }
-        public DateTime Start { get; set; }        
-        public RelationshipStatuses Status { get; set; }
-        public DateTime ModificationData { get; set; }
+        public string Initiator { get; set; }
+        public string Respondent { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
+        public RelationshipStatus Status { get; set; }        
     }
 }

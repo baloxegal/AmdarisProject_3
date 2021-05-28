@@ -21,15 +21,17 @@ namespace AmdarisProject_3.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<VideoPostDto>>> GetEntities()
+        public async Task<IEnumerable<VideoPostDto>> GetEntities()
         {
-            return await _service.GetEntities();
+            var result = await _service.GetEntities();
+            return result.Value;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<VideoPostDto>> GetEntity(long identityKey)
+        public async Task<VideoPostDto> GetEntity(long identityKey)
         {
-            return await _service.GetEntity(identityKey);
+            var result = await _service.GetEntity(identityKey);
+            return result.Value;
         }
 
         [HttpPut("{id}")]

@@ -1,12 +1,11 @@
-﻿using AmdarisProject_3.Domain.Models.Auth;
-using AmdarisProject_3.Domain.Models.Dtos;
+﻿using AmdarisProject_3.Domain.Models.Dtos;
 using AmdarisProject_3.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace AmdarisProject_3.API.Controllers
 {
@@ -15,9 +14,11 @@ namespace AmdarisProject_3.API.Controllers
     public class AuthorizationUserController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
-        public AuthorizationUserController(UserManager<User> userManager)
+        private readonly IMapper _mapper;
+        public AuthorizationUserController(UserManager<User> userManager, IMapper mapper)
         {
             _userManager = userManager;
+            _mapper = mapper;
         }
         
         [HttpGet]
@@ -26,15 +27,9 @@ namespace AmdarisProject_3.API.Controllers
         {
             var userId = User.Claims.First(c => c.Type == "UserID").Value;
             var user = await _userManager.FindByIdAsync(userId);
-            return new UserDto
-            {
-                UserName = user.UserName,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                PhoneNumber = user.PhoneNumber,
-                Avatar = user.Avatar
-            };
+
+            return _mapper.Map(user, new UserDto());
+
         }
 
         [HttpGet]

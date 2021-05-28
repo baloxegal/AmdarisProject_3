@@ -23,21 +23,24 @@ namespace AmdarisProject_3.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetEntities()
+        public async Task<IEnumerable<UserDto>> GetEntities()
         {
-            return await _service.GetEntities();
+            var result = await _service.GetEntities();
+            return result.Value;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserDto>> GetEntity(string identityKey)
-        {            
-            return await _service.GetEntity(identityKey);
+        public async Task<UserDto> GetEntity(string identityKey)
+        {
+            var result = await _service.GetEntity(identityKey);
+            return result.Value;
         }
 
         [HttpGet("{userName}")]
         public async Task<ActionResult<UserDto>> GetEntityByUserName(string userNameKey)
-        {           
-            return await _service.GetEntityByUserName(userNameKey);
+        {
+            var result = await _service.GetEntityByUserName(userNameKey);
+            return result.Value;
         }
 
         [HttpPut("{id}")]

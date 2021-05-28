@@ -1,7 +1,7 @@
 ﻿using AmdarisProject_3.Domain.Models;
-using AmdarisProject_3.Domain.Models.Dtos;
 using AmdarisProject_3.Infrastucture.Repositories;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,26 +13,45 @@ namespace AmdarisProject_3.API.Services
     public class CommentReactionService
     {
         private readonly IRepository<CommentReaction, long> _repository;
+        private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
 
-        public CommentReactionService(IRepository<CommentReaction, long> repository, IMapper mapper)
+        public CommentReactionService(IRepository<CommentReaction, long> repository, UserManager<User> userManager, IMapper mapper)
         {
             _repository = repository;
+            _userManager = userManager;
             _mapper = mapper;
         }
 
         public async Task<ActionResult<IEnumerable<CommentReactionDto>>> GetEntities()
         {
             var result = await _repository.GetEntities();
+            var listResult = result.Value.ToList();
 
-            return result.Value.Select(res => _mapper.Map(res, new CommentReactionDto())).ToList();             
+            var dtoResult = listResult.Select(res => _mapper.Map(res, new CommentReactionDto())).ToList();
+
+            for (int i = 0; i < listResult.Count; i++)
+            {
+                for (int j = 0; j < dtoResult.Count; j++)
+                {
+                    if (listResult[i].Author != null)
+                        dtoResult[j].Author = listResult[i].Author.UserName;
+                }
+            }
+
+            return dtoResult;
         }
 
         public async Task<ActionResult<CommentReactionDto>> GetEntity(long identityKey)
         {
             var result = await _repository.GetEntity(identityKey);
 
-            return _mapper.Map(result.Value, new CommentReactionDto());
+            var dtoResult = _mapper.Map(result.Value, new CommentReactionDto());
+
+            if (result.Value.Author != null)
+                dtoResult.Author = result.Value.Author.UserName;
+
+            return dtoResult;
         }
 
         public async Task<IActionResult> UpdateEntity(CommentReactionDto entity, long identityKey)
@@ -43,7 +62,10 @@ namespace AmdarisProject_3.API.Services
                 return new BadRequestObjectResult(new { message = $"Entity with identity key {identityKey} doesn't exist" });
             }
 
-            _mapper.Map(entity, baseEntity.Value);            
+            _mapper.Map(entity, baseEntity.Value);
+
+            if (baseEntity.Value.Author != null)
+                baseEntity.Value.Author.UserName = entity.Author;
 
             return await _repository.Save();
         }
@@ -51,6 +73,11 @@ namespace AmdarisProject_3.API.Services
         public async Task<IActionResult> CreateEntity(CommentReactionDto entity)
         {
             var baseEntity = _mapper.Map(entity, new CommentReaction());
+
+            var author = _userManager.FindByNameAsync(entity.Author);
+
+            baseEntity.Author = author.Result;
+
             try
             {
                 return await _repository.CreateEntity(baseEntity);

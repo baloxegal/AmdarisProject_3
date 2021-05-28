@@ -21,7 +21,7 @@ namespace AmdarisProject_3.Infrastucture.Repositories
         }
 
         public async Task<ActionResult<IEnumerable<IEntity>>> GetEntities()
-        {            
+        {
             return await _entity.ToListAsync();
         }
 
@@ -35,7 +35,7 @@ namespace AmdarisProject_3.Infrastucture.Repositories
             int result;
             try
             {
-                _entity.Add(entity);
+                await _entity.AddAsync(entity);
                 result = await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)

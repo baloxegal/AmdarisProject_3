@@ -20,7 +20,7 @@ namespace AmdarisProject_3.Infrastucture
         public DbSet<ImagePost> ImagePosts { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Event> Events { get; set; }
-        public DbSet<Relationship> RelationShips { get; set; }
+        public DbSet<Relationship> Relationships { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

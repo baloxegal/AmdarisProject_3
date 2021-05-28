@@ -7,23 +7,16 @@ namespace AmdarisProject_3.Domain.Models
         public long Id { get; set; }
         public User Initiator { get; set; }
         public User Respondent { get; set; }
-        public DateTime Start { get; set; }        
-        public RelationshipStatuses Status { get; set; }
-        public DateTime ModificationData { get; set; }
-
-        //public RelationshipSides ModificationUser { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
+        public RelationshipStatus Status { get; set; }
+       
     }
 
-    public enum RelationshipStatuses
+    public enum RelationshipStatus
     {
         Friendship,
         Folow,
         Ban
     }
-
-    //enum RelationshipSides
-    //{
-    //    InitiatorSide,
-    //    RespondentSide
-    //}
 }

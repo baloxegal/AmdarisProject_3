@@ -13,6 +13,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace AmdarisProject_3.API.Controllers
 {
@@ -24,13 +25,15 @@ namespace AmdarisProject_3.API.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly AuthSettings _appSettings;
         private readonly ILogger<AuthenticationUserController> _logger;
+        private readonly IMapper _mapper;
 
         public AuthenticationUserController(UserManager<User> userManager, SignInManager<User> signInManager,
-                                         IOptions<AuthSettings> appSettings, ILogger<AuthenticationUserController> logger)
+                                         IOptions<AuthSettings> appSettings, ILogger<AuthenticationUserController> logger, IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _appSettings = appSettings.Value;
+            _mapper = mapper;
             _logger = logger;
         }
 
@@ -40,15 +43,7 @@ namespace AmdarisProject_3.API.Controllers
         {
             model.Role = RoleTypes.CUSTOMER;
 
-            var user = new User()
-            {
-                UserName = model.UserName,
-                Email = model.Email,
-                PhoneNumber = model.PhoneNumber,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Avatar = model.Avatar
-            };
+            var user = _mapper.Map(model, new User());
             try
             {
                 var result = await _userManager.CreateAsync(user, model.Password);

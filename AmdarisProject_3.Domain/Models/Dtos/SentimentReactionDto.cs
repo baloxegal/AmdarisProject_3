@@ -5,7 +5,7 @@ namespace AmdarisProject_3.Domain.Models
 {
     public class SentimentReactionDto
     {        
-        public UserDto Author { get; set; }
+        public string Author { get; set; }
         public string LikeImageUrl { get; set; }
         public string LoveImageUrl { get; set; }
         public string CareImageUrl { get; set; }
